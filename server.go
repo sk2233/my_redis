@@ -16,6 +16,7 @@ type Server struct {
 }
 
 func (s *Server) Start() {
+	//fmt.Println(Logo)
 	var err error
 	s.Listener, err = net.Listen("tcp", fmt.Sprintf("%s:%d", s.Conf.Ip, s.Conf.Port))
 	HandleErr(err)

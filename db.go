@@ -38,6 +38,7 @@ func (d *DB) Exec(req *Req, session *Session, aof *AOF, writeAOF bool) {
 
 func (d *DB) ExecNormal(req *Req, session *Session, aof *AOF, writeAOF bool) {
 	if session.InTransaction {
+		// 最好检查一下，不要无脑入队列，前置检查出错误，整个事务都不要执行了
 		session.ReqQueue = append(session.ReqQueue, req)
 		session.WriteOk(req.SeqID, "EnQueue")
 		return
@@ -132,6 +133,10 @@ func (d *DB) ExecExec(req *Req, session *Session, aof *AOF) {
 func (d *DB) ExecWatch(req *Req, session *Session) {
 	if len(req.Args) == 0 {
 		session.WriteError(req.SeqID, "Invalid Watch Param")
+		return
+	}
+	if session.InTransaction {
+		session.WriteError(req.SeqID, "Watch Not Allow In Transaction")
 		return
 	}
 	count := 0
