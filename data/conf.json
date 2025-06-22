@@ -1,0 +1,11 @@
+{
+  "ip": "127.0.0.1",
+  "port": 3000,
+  "peers": [],
+  "dir": "",
+  "passwd": "123456",
+  "max_db": 8,
+  "shard_count": 256,
+  "aof_file": "/Users/sky/GolandProjects/my_redis/data/aof.log",
+  "aof_fsync": "no"
+}

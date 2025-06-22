@@ -1,0 +1,6 @@
+{"SeqID":"","Cmd":"SELECT","Args":["0"]}
+{"SeqID":"1750581853-220","Cmd":"zadd","Args":["class","22","mm","33","nn"]}
+{"SeqID":"1750581946-196","Cmd":"del","Args":["class"]}
+{"SeqID":"1750581968-799","Cmd":"set","Args":["name","nnnn"]}
+{"SeqID":"","Cmd":"ABSEXPIRE","Args":["name","1750582157"]}
+{"SeqID":"1750581991-523","Cmd":"persist","Args":["name"]}
