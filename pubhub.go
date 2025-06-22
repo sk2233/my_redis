@@ -85,22 +85,15 @@ func (p *Pubhub) Publish(req *Req, session *Session) {
 	count := 0
 	node := p.Data[req.Args[0]]
 	for node != nil {
-		// TODO TEST
-		node.Session.WriteResp(&Resp{
-			SeqID: req.SeqID,
-			Cmd:   "MESSAGE",
-			Args:  req.Args,
-		})
-		count++
-		// 不要给自己发
-		//if node.Session != session {
-		//node.Session.WriteResp(&Resp{
-		//	SeqID: req.SeqID,
-		//	Cmd:   "MESSAGE",
-		//	Args:  req.Args,
-		//})
-		//	count++
-		//}
+		/// 不要给自己发
+		if node.Session != session {
+			node.Session.WriteResp(&Resp{
+				SeqID: req.SeqID,
+				Cmd:   "MESSAGE",
+				Args:  req.Args,
+			})
+			count++
+		}
 		node = node.Next
 	}
 	session.WriteNum(req.SeqID, count)
