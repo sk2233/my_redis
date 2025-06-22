@@ -175,17 +175,26 @@ func (d *DB) RemoveTTL(key string) {
 }
 
 func (d *DB) SetTTL(key string, ttl int) {
-	d.TTLMap.Put(key, &Entry{
-		Type: TypeTime,
-		Time: time.Now().Add(time.Duration(ttl) * time.Second),
-	})
+	if ttl > 0 {
+		d.TTLMap.Put(key, &Entry{
+			Type: TypeTime,
+			Time: time.Now().Add(time.Duration(ttl) * time.Second),
+		})
+	} else { // 太小直接删除
+		d.DelEntry(key)
+	}
 }
 
 func (d *DB) SetAbsTTL(key string, ttl int) {
-	d.TTLMap.Put(key, &Entry{
-		Type: TypeTime,
-		Time: time.Unix(int64(ttl), 0),
-	})
+	time0 := time.Unix(int64(ttl), 0)
+	if time0.After(time.Now()) {
+		d.TTLMap.Put(key, &Entry{
+			Type: TypeTime,
+			Time: time0,
+		})
+	} else { // 在之前或者相等直接删除
+		d.DelEntry(key)
+	}
 }
 
 func (d *DB) GetTTL(key string) int {
