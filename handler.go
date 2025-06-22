@@ -91,6 +91,10 @@ func (h *Handler) HandleSelect(req *Req, session *Session) {
 		session.WriteError(req.SeqID, "Invalid Args")
 		return
 	}
+	if session.InTransaction { // 事务中不允许切换数据库
+		session.WriteError(req.SeqID, "Invalid Select In Transaction")
+		return
+	}
 	index, err := strconv.ParseInt(req.Args[0], 10, 64)
 	if err != nil {
 		session.WriteError(req.SeqID, "Invalid Index")
